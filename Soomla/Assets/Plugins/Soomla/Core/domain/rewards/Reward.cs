@@ -30,6 +30,8 @@ namespace Soomla {
 	/// You can give your user 100 coins for logging in through Facebook.
 	/// </summary>
 	public abstract class Reward {
+		private static string TAG = "SOOMLA Reward";
+
 		public string RewardId;
 		public string Name;
 		public bool   Repeatable;
@@ -96,6 +98,25 @@ namespace Soomla {
 			}
 		}
 #endif
+
+		public bool take() {
+
+			if (!RewardStorage.IsRewardGiven(this)) {
+				SoomlaUtils.LogDebug(TAG, "Reward not given. id: " + RewardId);
+				return false;
+			}
+			
+			if (takeInner()) {
+				RewardStorage.SetRewardStatus(this, false);
+				return true;
+			}
+			
+			return false;
+		}
+
+		protected abstract boolean giveInner();
+
+		protected abstract boolean takeInner();
 
 	}
 }
