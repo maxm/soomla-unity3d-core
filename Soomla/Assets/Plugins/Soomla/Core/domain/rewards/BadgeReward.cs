@@ -70,5 +70,16 @@ namespace Soomla {
 			return obj;
 		}
 
+		protected override boolean giveInner() {
+			
+			// nothing to do here... the parent Reward gives in storage
+			return true;
+		}
+
+		protected override boolean takeInner() {
+			// nothing to do here... the parent Reward takes in storage
+			return true;
+		}
+
 	}
 }

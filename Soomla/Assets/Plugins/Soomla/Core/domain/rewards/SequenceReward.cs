@@ -73,5 +73,49 @@ namespace Soomla {
 			return obj;
 		}
 
+
+		public Reward GetLastGivenReward() {
+			int idx = RewardStorage.GetLastSeqIdxGiven(this);
+			if (idx < 0) {
+				return null;
+			}
+			return Rewards[idx];
+		}
+
+		public boolean HasMoreToGive() {
+			return RewardStorage.GetLastSeqIdxGiven(this) < Rewards.Count ;
+		}
+
+		public boolean ForceNextRewardToGive(Reward reward) {
+			for (int i = 0; i < Rewards.Count; i++) {
+				if (Rewards[i].RewardId == reward.RewardId) {
+					RewardStorage.SetLastSeqIdxGiven(this, i - 1);
+					return true;
+				}
+			}
+			return false;
+		}
+
+
+
+
+		protected override boolean giveInner() {
+			int idx = RewardStorage.GetLastSeqIdxGiven(this);
+			if (idx >= Rewards.Count) {
+				return false; // all rewards in the sequence were given
+			}
+			RewardStorage.SetLastSeqIdxGiven(this, ++idx);
+			return true;
+		}
+
+		protected override boolean takeInner() {
+			int idx = RewardStorage.GetLastSeqIdxGiven(this);
+			if (idx <= 0) {
+				return false; // all rewards in the sequence were taken
+			}
+			RewardStorage.SetLastSeqIdxGiven(this, --idx);
+			return true;
+		}
+
 	}
 }

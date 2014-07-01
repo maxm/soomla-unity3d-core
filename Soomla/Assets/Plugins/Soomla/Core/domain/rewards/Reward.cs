@@ -99,7 +99,7 @@ namespace Soomla {
 		}
 #endif
 
-		public bool take() {
+		public bool Take() {
 
 			if (!RewardStorage.IsRewardGiven(this)) {
 				SoomlaUtils.LogDebug(TAG, "Reward not given. id: " + RewardId);
@@ -108,6 +108,20 @@ namespace Soomla {
 			
 			if (takeInner()) {
 				RewardStorage.SetRewardStatus(this, false);
+				return true;
+			}
+			
+			return false;
+		}
+
+		public boolean Give() {
+			if (RewardStorage.IsRewardGiven(this) && !Repeatable) {
+				SoomlaUtils.LogDebug(TAG, "Reward was already given and is not repeatable. id: " + RewardId);
+				return false;
+			}
+			
+			if (giveInner()) {
+				RewardStorage.SetRewardStatus(this, true);
 				return true;
 			}
 			

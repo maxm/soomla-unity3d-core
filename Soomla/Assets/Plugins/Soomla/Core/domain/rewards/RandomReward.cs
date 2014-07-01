@@ -28,6 +28,7 @@ namespace Soomla {
 	/// </summary>
 	public class RandomReward : Reward {
 		public List<Reward> Rewards;
+		public Reward LastGivenReward;
 
 		/// <summary>
 		/// Constructor.
@@ -70,6 +71,28 @@ namespace Soomla {
 			obj.AddField(JSONConsts.SOOM_REWARDS, rewardsObj);
 			
 			return obj;
+		}
+
+		protected override boolean giveInner() {
+			Random rand = new Random();
+			int n = random.Next(mRewards.size());
+			Reward randomReward = Rewards[n];
+			randomReward.Give();
+			LastGivenReward = randomReward;
+			
+			return true;
+		}
+
+		protected override boolean takeInner() {
+			// for now is able to take only last given
+			if(LastGivenReward == null) {
+				return false;
+			}
+			
+			boolean taken = LastGivenReward.Take();
+			LastGivenReward = null;
+			
+			return taken;
 		}
 
 	}
