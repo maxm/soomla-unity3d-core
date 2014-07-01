@@ -1,4 +1,4 @@
-﻿/// Copyright (C) 2012-2014 Soomla Inc.
+/// Copyright (C) 2012-2014 Soomla Inc.
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
@@ -22,269 +22,59 @@ namespace Soomla {
 #if UNITY_IOS && !UNITY_EDITOR
 
 		[DllImport ("__Internal")]
-		private static extern int storeInfo_GetItemByItemId(string itemId, out IntPtr json);
+		private static extern void rewardStorage_SetRewardStatus(IntPtr rewardJson, [MarshalAs(UnmanagedType.Bool)] bool give);
 		[DllImport ("__Internal")]
-		private static extern int storeInfo_GetPurchasableItemWithProductId(string productId, out IntPtr json);
+		[return:MarshalAs(UnmanagedType.I1)]
+		private static extern bool rewardStorage_IsRewardGiven(IntPtr rewardJson);
 		[DllImport ("__Internal")]
-		private static extern int storeInfo_GetCategoryForVirtualGood(string goodItemId, out IntPtr json);
+		private static extern int rewardStorage_GetLastSeqIdxGiven(IntPtr rewardJson);
 		[DllImport ("__Internal")]
-		private static extern int storeInfo_GetFirstUpgradeForVirtualGood(string goodItemId, out IntPtr json);
-		[DllImport ("__Internal")]
-		private static extern int storeInfo_GetLastUpgradeForVirtualGood(string goodItemId, out IntPtr json);
-		[DllImport ("__Internal")]
-		private static extern int storeInfo_GetUpgradesForVirtualGood(string goodItemId, out IntPtr json);
-		[DllImport ("__Internal")]
-		private static extern int storeInfo_GetVirtualCurrencies(out IntPtr json);
-		[DllImport ("__Internal")]
-		private static extern int storeInfo_GetVirtualGoods(out IntPtr json);
-		[DllImport ("__Internal")]
-		private static extern int storeInfo_GetVirtualCurrencyPacks(out IntPtr json);
-		[DllImport ("__Internal")]
-		private static extern int storeInfo_GetNonConsumableItems(out IntPtr json);
-		[DllImport ("__Internal")]
-		private static extern int storeInfo_GetVirtualCategories(out IntPtr json);
-		[DllImport ("__Internal")]
-		private static extern void storeAssets_Init(int version, string storeAssetsJSON);
+		private static extern void rewardStorage_SetLastSeqIdxGiven(IntPtr rewardJson, int idx);
 
 		/// <summary>
-		/// Initializes <c>StoreInfo</c>. 
-		/// On first initialization, when the database doesn't have any previous version of the store
-		/// metadata, <c>StoreInfo</c> gets loaded from the given <c>IStoreAssets</c>.
-		/// After the first initialization, <c>StoreInfo</c> will be initialized from the database.
-		/// 
-		/// IMPORTANT: If you want to override the current <c>StoreInfo</c>, you'll have to bump
-		/// the version of your implementation of <c>IStoreAssets</c> in order to remove the
-		/// metadata when the application loads. Bumping the version is done by returning a higher 
-		/// number in <c>IStoreAssets</c>'s <c>getVersion</c>.
+		/// Set the reward given status
 		/// </summary>
-		/// <param name="storeAssets">your game's economy</param>
-		override protected void _initialize(int version, string storeAssetsJSON) {
-			SoomlaUtils.LogDebug(TAG, "pushing data to StoreAssets on ios side");
-			storeAssets_Init(version, storeAssetsJSON);
-			SoomlaUtils.LogDebug(TAG, "done! (pushing data to StoreAssets on ios side)");
+		/// <param name="reward">to set status for</param>
+		/// <param name="give">true to give, false to take</param>
+		/// <returns></returns>
+		override protected void _setRewardStatus(Reward reward, bool give) {
+			string rewardJson = reward.toJSONString();
+			rewardStorage_SetRewardStatus(rewardJson, give);
+			
+//			int err = rewardStorage_SetRewardStatus(rewardJson, give);
+//			IOS_ErrorCodes.CheckAndThrowException(err);
 		}
 
 		/// <summary>
-		/// Gets the item with the given <c>itemId</c>.
+		/// Check the reward given status
 		/// </summary>
-		/// <param name="itemId">Item id.</param>
-		/// <returns>Item with the given id.</returns>
-		/// <exception cref="VirtualItemNotFoundException">Exception is thrown if item is not found.</exception>
-		override protected VirtualItem _getItemByItemId(string itemId) {
-			IntPtr p = IntPtr.Zero;
-			int err = storeInfo_GetItemByItemId(itemId, out p);
-			IOS_ErrorCodes.CheckAndThrowException(err);
-			
-			string json = Marshal.PtrToStringAnsi(p);
-			Marshal.FreeHGlobal(p);
-			SoomlaUtils.LogDebug(TAG, "Got json: " + json);
-
-			JSONObject obj = new JSONObject(json);
-			return VirtualItem.factoryItemFromJSONObject(obj);
+		/// <param name="reward">to query</param>
+		/// <returns>true if reward was given</returns>
+		override protected bool _isRewardGiven(Reward reward) {
+			string rewardJson = reward.toJSONString();
+			return rewardStorage_IsRewardGiven(rewardJson);
 		}
-
+		
 		/// <summary>
-		/// Gets the purchasable item with the given <c>productId</c>.
+		/// Get last id of given reward from a <c>SequenceReward</c>
 		/// </summary>
-		/// <param name="productId">Product id.</param>
-		/// <returns>Purchasable virtual item with the given id.</returns>
-		/// <exception cref="VirtualItemNotFoundException">Exception is thrown if item is not found.</exception>
-		override protected PurchasableVirtualItem _getPurchasableItemWithProductId(string productId) {
-			IntPtr p = IntPtr.Zero;
-			int err = storeInfo_GetPurchasableItemWithProductId(productId, out p);
-			IOS_ErrorCodes.CheckAndThrowException(err);
-			
-			string nonConsJson = Marshal.PtrToStringAnsi(p);
-			Marshal.FreeHGlobal(p);
-
-			JSONObject obj = new JSONObject(nonConsJson);
-			return (PurchasableVirtualItem)VirtualItem.factoryItemFromJSONObject(obj);
+		/// <param name="reward">to query</param>
+		/// <returns>true if reward was given</returns>
+		override protected bool _getLastSeqIdxGiven(Reward reward) {
+			string rewardJson = reward.toJSONString();
+			return rewardStorage_GetLastSeqIdxGiven(rewardJson);
 		}
-
+		
 		/// <summary>
-		/// Gets the category that the virtual good with the given <c>goodItemId</c> belongs to.
+		/// Set last id of given reward from a <c>SequenceReward</c>
 		/// </summary>
-		/// <param name="goodItemId">Item id.</param>
-		/// <returns>Category that the item with given id belongs to.</returns>
-		/// <exception cref="VirtualItemNotFoundException">Exception is thrown if category is not found.</exception>
-		override protected VirtualCategory _getCategoryForVirtualGood(string goodItemId) {
-			IntPtr p = IntPtr.Zero;
-			int err = storeInfo_GetCategoryForVirtualGood(goodItemId, out p);
-			IOS_ErrorCodes.CheckAndThrowException(err);
-			
-			string json = Marshal.PtrToStringAnsi(p);
-			Marshal.FreeHGlobal(p);
-			
-			JSONObject obj = new JSONObject(json);
-			return new VirtualCategory(obj);
-		}
-
-		/// <summary>
-		/// Gets the first upgrade for virtual good with the given <c>goodItemId</c>.
-		/// </summary>
-		/// <param name="goodItemId">Item id.</param>
-		/// <returns>The first upgrade for virtual good with the given id.</returns>
-		override protected UpgradeVG _getFirstUpgradeForVirtualGood(string goodItemId) {
-			IntPtr p = IntPtr.Zero;
-			int err = storeInfo_GetFirstUpgradeForVirtualGood(goodItemId, out p);
-			IOS_ErrorCodes.CheckAndThrowException(err);
-			
-			string json = Marshal.PtrToStringAnsi(p);
-			Marshal.FreeHGlobal(p);
-			
-			JSONObject obj = new JSONObject(json);
-			return new UpgradeVG(obj);
-		}
-
-		/// <summary>
-		/// Gets the last upgrade for the virtual good with the given <c>goodItemId</c>.
-		/// </summary>
-		/// <param name="goodItemId">item id</param>
-		/// <returns>last upgrade for virtual good with the given id</returns>
-		override protected UpgradeVG _getLastUpgradeForVirtualGood(string goodItemId) {
-			IntPtr p = IntPtr.Zero;
-			int err = storeInfo_GetLastUpgradeForVirtualGood(goodItemId, out p);
-			IOS_ErrorCodes.CheckAndThrowException(err);
-			
-			string json = Marshal.PtrToStringAnsi(p);
-			Marshal.FreeHGlobal(p);
-			
-			JSONObject obj = new JSONObject(json);
-			return new UpgradeVG(obj);
-		}
-
-		/// <summary>
-		/// Gets all the upgrades for the virtual good with the given <c>goodItemId</c>.
-		/// </summary>
-		/// <param name="goodItemId">Item id.</param>
-		/// <returns>All upgrades for virtual good with the given id.</returns>
-		override protected List<UpgradeVG> _getUpgradesForVirtualGood(string goodItemId) {
-			List<UpgradeVG> vgus = new List<UpgradeVG>();
-			IntPtr p = IntPtr.Zero;
-			int err = storeInfo_GetUpgradesForVirtualGood(goodItemId, out p);
-			IOS_ErrorCodes.CheckAndThrowException(err);
-			
-			string upgradesJson = Marshal.PtrToStringAnsi(p);
-			Marshal.FreeHGlobal(p);
-			
-			SoomlaUtils.LogDebug(TAG, "Got json: " + upgradesJson);
-			
-			JSONObject upgradesArr = new JSONObject(upgradesJson);
-			foreach(JSONObject obj in upgradesArr.list) {
-				vgus.Add(new UpgradeVG(obj));
-			}
-			return vgus;
-		}
-
-		/// <summary>
-		/// Fetches the virtual currencies of your game.
-		/// </summary>
-		/// <returns>The virtual currencies.</returns>
-		override protected List<VirtualCurrency> _getVirtualCurrencies() {
-			List<VirtualCurrency> vcs = new List<VirtualCurrency>();
-			IntPtr p = IntPtr.Zero;
-			int err = storeInfo_GetVirtualCurrencies(out p);
-			IOS_ErrorCodes.CheckAndThrowException(err);
-			
-			string currenciesJson = Marshal.PtrToStringAnsi(p);
-			Marshal.FreeHGlobal(p);
-			
-			SoomlaUtils.LogDebug(TAG, "Got json: " + currenciesJson);
-			
-			JSONObject currenciesArr = new JSONObject(currenciesJson);
-			foreach(JSONObject obj in currenciesArr.list) {
-				vcs.Add(new VirtualCurrency(obj));
-			}
-			return vcs;
-		}
-
-		/// <summary>
-		/// Fetches the virtual goods of your game.
-		/// </summary>
-		/// <returns>All virtual goods.</returns>
-		override protected List<VirtualGood> _getVirtualGoods() {
-			List<VirtualGood> virtualGoods = new List<VirtualGood>();
-			IntPtr p = IntPtr.Zero;
-			int err = storeInfo_GetVirtualGoods(out p);
-			IOS_ErrorCodes.CheckAndThrowException(err);
-			
-			string goodsJson = Marshal.PtrToStringAnsi(p);
-			Marshal.FreeHGlobal(p);
-			
-			SoomlaUtils.LogDebug(TAG, "Got json: " + goodsJson);
-			
-			JSONObject goodsArr = new JSONObject(goodsJson);
-			foreach(JSONObject obj in goodsArr.list) {
-				virtualGoods.Add((VirtualGood)VirtualItem.factoryItemFromJSONObject(obj));
-			}
-			return virtualGoods;
-		}
-
-		/// <summary>
-		/// Fetches the virtual currency packs of your game.
-		/// </summary>
-		/// <returns>All virtual currency packs.</returns>
-		override protected List<VirtualCurrencyPack> _getVirtualCurrencyPacks() {
-			List<VirtualCurrencyPack> vcps = new List<VirtualCurrencyPack>();
-			IntPtr p = IntPtr.Zero;
-			int err = storeInfo_GetVirtualCurrencyPacks(out p);
-			IOS_ErrorCodes.CheckAndThrowException(err);
-			
-			string packsJson = Marshal.PtrToStringAnsi(p);
-			Marshal.FreeHGlobal(p);
-			
-			SoomlaUtils.LogDebug(TAG, "Got json: " + packsJson);
-			
-			JSONObject packsArr = new JSONObject(packsJson);
-			foreach(JSONObject obj in packsArr.list) {
-				vcps.Add(new VirtualCurrencyPack(obj));
-			}
-			return vcps;
-		}
-
-		/// <summary>
-		/// Fetches the non consumable items of your game.
-		/// </summary>
-		/// <returns>All non consumable items.</returns>
-		override protected List<NonConsumableItem> _getNonConsumableItems() {
-			List<NonConsumableItem> nonConsumableItems = new List<NonConsumableItem>();
-			IntPtr p = IntPtr.Zero;
-			int err = storeInfo_GetNonConsumableItems(out p);
-			IOS_ErrorCodes.CheckAndThrowException(err);
-			
-			string nonConsumableJson = Marshal.PtrToStringAnsi(p);
-			Marshal.FreeHGlobal(p);
-			
-			SoomlaUtils.LogDebug(TAG, "Got json: " + nonConsumableJson);
-			
-			JSONObject nonConsArr = new JSONObject(nonConsumableJson);
-			foreach(JSONObject obj in nonConsArr.list) {
-				nonConsumableItems.Add(new NonConsumableItem(obj));
-			}
-			return nonConsumableItems;
-		}
-
-		/// <summary>
-		/// Fetches the virtual categories of your game.
-		/// </summary>
-		/// <returns>All virtual categories.</returns>
-		override protected List<VirtualCategory> _getVirtualCategories() {
-			List<VirtualCategory> virtualCategories = new List<VirtualCategory>();
-			IntPtr p = IntPtr.Zero;
-			int err = storeInfo_GetVirtualCategories(out p);
-			IOS_ErrorCodes.CheckAndThrowException(err);
-			
-			string categoriesJson = Marshal.PtrToStringAnsi(p);
-			Marshal.FreeHGlobal(p);
-			
-			SoomlaUtils.LogDebug(TAG, "Got json: " + categoriesJson);
-			
-			JSONObject categoriesArr = new JSONObject(categoriesJson);
-			foreach(JSONObject obj in categoriesArr.list) {
-				virtualCategories.Add(new VirtualCategory(obj));
-			}
-			return virtualCategories;
-		}
+		/// <param name="reward">to set last id for</param>
+		/// <param name="reward">the last id to to mark as given</param>
+		/// <returns>true if reward was given</returns>
+		override protected bool _setLastSeqIdxGiven(Reward reward, int idx) {
+			string rewardJson = reward.toJSONString();
+			return rewardStorage_SetLastSeqIdxGiven(rewardJson, idx);
+		}		
 #endif
 	}
 }
