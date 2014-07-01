@@ -60,7 +60,7 @@ namespace Soomla {
 		/// </summary>
 		/// <param name="reward">to query</param>
 		/// <returns>true if reward was given</returns>
-		override protected bool _getLastSeqIdxGiven(Reward reward) {
+		override protected bool _getLastSeqIdxGiven(SequencneReward seqReward) {
 			string rewardJson = reward.toJSONString();
 			return rewardStorage_GetLastSeqIdxGiven(rewardJson);
 		}
@@ -71,7 +71,7 @@ namespace Soomla {
 		/// <param name="reward">to set last id for</param>
 		/// <param name="reward">the last id to to mark as given</param>
 		/// <returns>true if reward was given</returns>
-		override protected bool _setLastSeqIdxGiven(Reward reward, int idx) {
+		override protected bool _setLastSeqIdxGiven(SequencneReward seqReward, int idx) {
 			string rewardJson = reward.toJSONString();
 			return rewardStorage_SetLastSeqIdxGiven(rewardJson, idx);
 		}		
