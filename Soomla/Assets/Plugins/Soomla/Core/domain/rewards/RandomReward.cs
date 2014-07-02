@@ -15,6 +15,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 
 namespace Soomla {	
@@ -73,8 +74,8 @@ namespace Soomla {
 		}
 
 		protected override bool giveInner() {
-			Random rand = new Random();
-			int n = random.Next(mRewards.size());
+			System.Random rand = new System.Random();
+			int n = rand.Next(Rewards.Count);
 			Reward randomReward = Rewards[n];
 			randomReward.Give();
 			LastGivenReward = randomReward;

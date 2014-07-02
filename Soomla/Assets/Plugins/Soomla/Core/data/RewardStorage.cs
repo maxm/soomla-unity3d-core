@@ -71,10 +71,12 @@ namespace Soomla
 
 		virtual protected bool _isRewardGiven(Reward reward) {
 			// TODO: WIE
+			return false;
 		}
 
 		virtual protected int _getLastSeqIdxGiven(Reward reward) {
 			// TODO: WIE
+			return 0;
 		}
 
 		virtual protected void _setLastSeqIdxGiven(Reward reward, int idx) {
