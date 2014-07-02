@@ -62,7 +62,6 @@ namespace Soomla {
 		/// <returns>see parent.</returns>
 		public override JSONObject toJSONObject() {
 			JSONObject obj = base.toJSONObject();
-			obj.AddField(JSONConsts.SOOM_CLASSNAME, GetType().Name);
 			
 			JSONObject rewardsObj = new JSONObject(JSONObject.Type.ARRAY);
 			foreach(Reward r in Rewards) {
@@ -82,11 +81,11 @@ namespace Soomla {
 			return Rewards[idx];
 		}
 
-		public boolean HasMoreToGive() {
+		public bool HasMoreToGive() {
 			return RewardStorage.GetLastSeqIdxGiven(this) < Rewards.Count ;
 		}
 
-		public boolean ForceNextRewardToGive(Reward reward) {
+		public bool ForceNextRewardToGive(Reward reward) {
 			for (int i = 0; i < Rewards.Count; i++) {
 				if (Rewards[i].RewardId == reward.RewardId) {
 					RewardStorage.SetLastSeqIdxGiven(this, i - 1);
@@ -99,7 +98,7 @@ namespace Soomla {
 
 
 
-		protected override boolean giveInner() {
+		protected override bool giveInner() {
 			int idx = RewardStorage.GetLastSeqIdxGiven(this);
 			if (idx >= Rewards.Count) {
 				return false; // all rewards in the sequence were given
@@ -108,7 +107,7 @@ namespace Soomla {
 			return true;
 		}
 
-		protected override boolean takeInner() {
+		protected override bool takeInner() {
 			int idx = RewardStorage.GetLastSeqIdxGiven(this);
 			if (idx <= 0) {
 				return false; // all rewards in the sequence were taken

@@ -64,19 +64,17 @@ namespace Soomla {
 		public override JSONObject toJSONObject() {
 			JSONObject obj = base.toJSONObject();
 			obj.AddField(JSONConsts.SOOM_REWARD_ICONURL, IconUrl);
-			obj.AddField(JSONConsts.SOOM_CLASSNAME, GetType().Name);
-
 			
 			return obj;
 		}
 
-		protected override boolean giveInner() {
+		protected override bool giveInner() {
 			
 			// nothing to do here... the parent Reward gives in storage
 			return true;
 		}
 
-		protected override boolean takeInner() {
+		protected override bool takeInner() {
 			// nothing to do here... the parent Reward takes in storage
 			return true;
 		}

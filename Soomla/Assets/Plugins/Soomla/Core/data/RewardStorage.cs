@@ -39,15 +39,15 @@ namespace Soomla
 		}
 			
 
-		public static void SetRewardStatus(Reward reward, boolean give) {
+		public static void SetRewardStatus(Reward reward, bool give) {
 			SetRewardStatus(reward, give, true);
 		}
 
-		public static void SetRewardStatus(Reward reward, boolean give, boolean notify) {
+		public static void SetRewardStatus(Reward reward, bool give, bool notify) {
 			_instance._setRewardStatus(reward, give, notify);
 		}
 
-		public static boolean IsRewardGiven(Reward reward) {
+		public static bool IsRewardGiven(Reward reward) {
 			return _instance._isRewardGiven(reward);
 		}
 
@@ -65,7 +65,7 @@ namespace Soomla
 
 
 
-		virtual protected void _setRewardStatus(Reward reward, boolean give, boolean notify) {
+		virtual protected void _setRewardStatus(Reward reward, bool give, bool notify) {
 			// TODO: WIE
 		}
 

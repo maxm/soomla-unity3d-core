@@ -21,7 +21,7 @@ namespace Soomla {
 
 #if UNITY_ANDROID && !UNITY_EDITOR
 		
-		override protected void _setRewardStatus(Reward reward, boolean give, boolean notify) {
+		override protected void _setRewardStatus(Reward reward, bool give, bool notify) {
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniRewardStorage = new AndroidJavaClass("com.soomla.data.RewardStorage")) {
 				jniRewardStorage.CallStatic("setRewardStatus", reward.toJNIObject(), give, notify);

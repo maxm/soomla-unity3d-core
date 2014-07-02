@@ -73,6 +73,7 @@ namespace Soomla {
 			obj.AddField(JSONConsts.SOOM_REWARD_REWARDID, RewardId);
 			obj.AddField(JSONConsts.SOOM_NAME, Name);
 			obj.AddField(JSONConsts.SOOM_REWARD_REPEAT, Repeatable);
+			obj.AddField(JSONConsts.SOOM_CLASSNAME, GetType().Name);
 			
 			return obj;
 		}
@@ -114,7 +115,7 @@ namespace Soomla {
 			return false;
 		}
 
-		public boolean Give() {
+		public bool Give() {
 			if (RewardStorage.IsRewardGiven(this) && !Repeatable) {
 				SoomlaUtils.LogDebug(TAG, "Reward was already given and is not repeatable. id: " + RewardId);
 				return false;
@@ -128,9 +129,9 @@ namespace Soomla {
 			return false;
 		}
 
-		protected abstract boolean giveInner();
+		protected abstract bool giveInner();
 
-		protected abstract boolean takeInner();
+		protected abstract bool takeInner();
 
 	}
 }

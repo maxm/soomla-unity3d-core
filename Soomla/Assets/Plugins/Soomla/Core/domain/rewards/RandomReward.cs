@@ -62,7 +62,6 @@ namespace Soomla {
 		/// <returns>see parent.</returns>
 		public override JSONObject toJSONObject() {
 			JSONObject obj = base.toJSONObject();
-			obj.AddField(JSONConsts.SOOM_CLASSNAME, GetType().Name);
 
 			JSONObject rewardsObj = new JSONObject(JSONObject.Type.ARRAY);
 			foreach(Reward r in Rewards) {
@@ -73,7 +72,7 @@ namespace Soomla {
 			return obj;
 		}
 
-		protected override boolean giveInner() {
+		protected override bool giveInner() {
 			Random rand = new Random();
 			int n = random.Next(mRewards.size());
 			Reward randomReward = Rewards[n];
@@ -83,13 +82,13 @@ namespace Soomla {
 			return true;
 		}
 
-		protected override boolean takeInner() {
+		protected override bool takeInner() {
 			// for now is able to take only last given
 			if(LastGivenReward == null) {
 				return false;
 			}
 			
-			boolean taken = LastGivenReward.Take();
+			bool taken = LastGivenReward.Take();
 			LastGivenReward = null;
 			
 			return taken;

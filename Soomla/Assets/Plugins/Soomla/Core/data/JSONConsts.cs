@@ -35,7 +35,6 @@ namespace Soomla {
 		
 		public const string SOOM_ASSOCITEMID       = "associatedItemId";
 		public const string SOOM_ASSOCSCOREID      = "associatedScoreId";
-		public const string SOOM_ASSOCWORLDID      = "associatedWorldId";
 		public const string SOOM_DESIRED_RECORD    = "desiredRecord";
 		public const string SOOM_DESIRED_BALANCE   = "desiredBalance";
 		public const string SOOM_NAME              = "name";
