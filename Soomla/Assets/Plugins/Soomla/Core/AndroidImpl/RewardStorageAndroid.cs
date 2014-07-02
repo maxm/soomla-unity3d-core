@@ -1,4 +1,4 @@
-﻿/// Copyright (C) 2012-2014 Soomla Inc.
+/// Copyright (C) 2012-2014 Soomla Inc.
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ namespace Soomla {
 			return given;
 		}
 		
-		override protected int _getLastSeqIdxGiven(Reward reward) {
+		override protected int _getLastSeqIdxGiven(SequencneReward reward) {
 			int idx = -1;
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniRewardStorage = new AndroidJavaClass("com.soomla.data.RewardStorage")) {
@@ -49,7 +49,7 @@ namespace Soomla {
 			return idx;
 		}
 		
-		override protected void _setLastSeqIdxGiven(Reward reward, int idx) {
+		override protected void _setLastSeqIdxGiven(SequencneReward reward, int idx) {
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniRewardStorage = new AndroidJavaClass("com.soomla.data.RewardStorage")) {
 				jniRewardStorage.CallStatic("setLastSeqIdxGiven", reward.toJNIObject(), idx);
