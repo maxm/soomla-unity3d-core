@@ -39,7 +39,7 @@ namespace Soomla {
 			return given;
 		}
 		
-		override protected int _getLastSeqIdxGiven(SequencneReward reward) {
+		override protected int _getLastSeqIdxGiven(SequenceReward reward) {
 			int idx = -1;
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniRewardStorage = new AndroidJavaClass("com.soomla.data.RewardStorage")) {
@@ -49,7 +49,7 @@ namespace Soomla {
 			return idx;
 		}
 		
-		override protected void _setLastSeqIdxGiven(SequencneReward reward, int idx) {
+		override protected void _setLastSeqIdxGiven(SequenceReward reward, int idx) {
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaClass jniRewardStorage = new AndroidJavaClass("com.soomla.data.RewardStorage")) {
 				jniRewardStorage.CallStatic("setLastSeqIdxGiven", reward.toJNIObject(), idx);

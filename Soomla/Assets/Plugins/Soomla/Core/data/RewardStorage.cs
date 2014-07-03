@@ -54,11 +54,11 @@ namespace Soomla
 		/// <summary>
 		/// Retrieves the index of the last reward given in a sequence of rewards.
 		/// </summary>
-		public static int GetLastSeqIdxGiven(Reward reward) {
+		public static int GetLastSeqIdxGiven(SequenceReward reward) {
 			return _instance._getLastSeqIdxGiven(reward);
 		}
 
-		public static void SetLastSeqIdxGiven(Reward reward, int idx) {
+		public static void SetLastSeqIdxGiven(SequenceReward reward, int idx) {
 			_instance._setLastSeqIdxGiven(reward, idx);
 		}
 
@@ -74,12 +74,12 @@ namespace Soomla
 			return false;
 		}
 
-		virtual protected int _getLastSeqIdxGiven(Reward reward) {
+		virtual protected int _getLastSeqIdxGiven(SequenceReward reward) {
 			// TODO: WIE
 			return 0;
 		}
 
-		virtual protected void _setLastSeqIdxGiven(Reward reward, int idx) {
+		virtual protected void _setLastSeqIdxGiven(SequenceReward reward, int idx) {
 			// TODO: WIE
 		}
 	}
