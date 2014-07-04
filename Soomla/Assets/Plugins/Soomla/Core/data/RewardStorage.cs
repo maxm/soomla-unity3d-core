@@ -44,27 +44,25 @@ namespace Soomla
 		}
 
 		public static void SetRewardStatus(Reward reward, bool give, bool notify) {
-			_instance._setRewardStatus(reward, give, notify);
+			instance._setRewardStatus(reward, give, notify);
 		}
 
 		public static bool IsRewardGiven(Reward reward) {
-			return _instance._isRewardGiven(reward);
+			return instance._isRewardGiven(reward);
 		}
 
 		/// <summary>
 		/// Retrieves the index of the last reward given in a sequence of rewards.
 		/// </summary>
 		public static int GetLastSeqIdxGiven(SequenceReward reward) {
-			return _instance._getLastSeqIdxGiven(reward);
+			return instance._getLastSeqIdxGiven(reward);
 		}
 
 		public static void SetLastSeqIdxGiven(SequenceReward reward, int idx) {
-			_instance._setLastSeqIdxGiven(reward, idx);
+			instance._setLastSeqIdxGiven(reward, idx);
 		}
 
-
-
-
+		
 		virtual protected void _setRewardStatus(Reward reward, bool give, bool notify) {
 			// TODO: WIE
 		}
@@ -74,12 +72,12 @@ namespace Soomla
 			return false;
 		}
 
-		virtual protected int _getLastSeqIdxGiven(SequenceReward reward) {
+		virtual protected int _getLastSeqIdxGiven(SequenceReward seqReward) {
 			// TODO: WIE
 			return 0;
 		}
 
-		virtual protected void _setLastSeqIdxGiven(SequenceReward reward, int idx) {
+		virtual protected void _setLastSeqIdxGiven(SequenceReward seqReward, int idx) {
 			// TODO: WIE
 		}
 	}

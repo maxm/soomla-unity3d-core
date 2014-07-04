@@ -36,10 +36,11 @@ namespace Soomla {
 		/// </summary>
 		/// <param name="reward">to set status for</param>
 		/// <param name="give">true to give, false to take</param>
+		/// <param name="notify">should this post an event</param>
 		/// <returns></returns>
-		override protected void _setRewardStatus(Reward reward, bool give) {
+		override protected void _setRewardStatus(Reward reward, bool give, bool notify) {
 			string rewardJson = reward.toJSONString();
-			rewardStorage_SetRewardStatus(rewardJson, give);
+			rewardStorage_SetRewardStatus(rewardJson, give, notify);
 			
 //			int err = rewardStorage_SetRewardStatus(rewardJson, give);
 //			IOS_ErrorCodes.CheckAndThrowException(err);
@@ -59,8 +60,8 @@ namespace Soomla {
 		/// Get last id of given reward from a <c>SequenceReward</c>
 		/// </summary>
 		/// <param name="reward">to query</param>
-		/// <returns>true if reward was given</returns>
-		override protected bool _getLastSeqIdxGiven(SequencneReward seqReward) {
+		/// <returns>last index of sequence reward given</returns>
+		override protected int _getLastSeqIdxGiven(SequenceReward seqReward) {
 			string rewardJson = reward.toJSONString();
 			return rewardStorage_GetLastSeqIdxGiven(rewardJson);
 		}
@@ -70,8 +71,7 @@ namespace Soomla {
 		/// </summary>
 		/// <param name="reward">to set last id for</param>
 		/// <param name="reward">the last id to to mark as given</param>
-		/// <returns>true if reward was given</returns>
-		override protected bool _setLastSeqIdxGiven(SequencneReward seqReward, int idx) {
+		override protected void _setLastSeqIdxGiven(SequenceReward seqReward, int idx) {
 			string rewardJson = reward.toJSONString();
 			return rewardStorage_SetLastSeqIdxGiven(rewardJson, idx);
 		}		
