@@ -14,6 +14,7 @@
 
 using UnityEngine;
 using System;
+using System.Runtime.InteropServices;
 
 namespace Soomla {
 	
@@ -22,14 +23,16 @@ namespace Soomla {
 #if UNITY_IOS && !UNITY_EDITOR
 
 		[DllImport ("__Internal")]
-		private static extern void rewardStorage_SetRewardStatus(IntPtr rewardJson, [MarshalAs(UnmanagedType.Bool)] bool give);
+		private static extern void rewardStorage_SetRewardStatus(string rewardJson,
+		                                                         [MarshalAs(UnmanagedType.Bool)] bool give,
+		                                                         [MarshalAs(UnmanagedType.Bool)] bool notify);
 		[DllImport ("__Internal")]
 		[return:MarshalAs(UnmanagedType.I1)]
-		private static extern bool rewardStorage_IsRewardGiven(IntPtr rewardJson);
+		private static extern bool rewardStorage_IsRewardGiven(string rewardJson);
 		[DllImport ("__Internal")]
-		private static extern int rewardStorage_GetLastSeqIdxGiven(IntPtr rewardJson);
+		private static extern int rewardStorage_GetLastSeqIdxGiven(string rewardJson);
 		[DllImport ("__Internal")]
-		private static extern void rewardStorage_SetLastSeqIdxGiven(IntPtr rewardJson, int idx);
+		private static extern void rewardStorage_SetLastSeqIdxGiven(string rewardJson, int idx);
 
 		/// <summary>
 		/// Set the reward given status
@@ -39,7 +42,7 @@ namespace Soomla {
 		/// <param name="notify">should this post an event</param>
 		/// <returns></returns>
 		override protected void _setRewardStatus(Reward reward, bool give, bool notify) {
-			string rewardJson = reward.toJSONString();
+			string rewardJson = reward.toJSONObject().ToString();
 			rewardStorage_SetRewardStatus(rewardJson, give, notify);
 			
 //			int err = rewardStorage_SetRewardStatus(rewardJson, give);
@@ -52,7 +55,7 @@ namespace Soomla {
 		/// <param name="reward">to query</param>
 		/// <returns>true if reward was given</returns>
 		override protected bool _isRewardGiven(Reward reward) {
-			string rewardJson = reward.toJSONString();
+			string rewardJson = reward.toJSONObject().ToString();
 			return rewardStorage_IsRewardGiven(rewardJson);
 		}
 		
@@ -62,7 +65,7 @@ namespace Soomla {
 		/// <param name="reward">to query</param>
 		/// <returns>last index of sequence reward given</returns>
 		override protected int _getLastSeqIdxGiven(SequenceReward seqReward) {
-			string rewardJson = reward.toJSONString();
+			string rewardJson = seqReward.toJSONObject().ToString();
 			return rewardStorage_GetLastSeqIdxGiven(rewardJson);
 		}
 		
@@ -72,8 +75,8 @@ namespace Soomla {
 		/// <param name="reward">to set last id for</param>
 		/// <param name="reward">the last id to to mark as given</param>
 		override protected void _setLastSeqIdxGiven(SequenceReward seqReward, int idx) {
-			string rewardJson = reward.toJSONString();
-			return rewardStorage_SetLastSeqIdxGiven(rewardJson, idx);
+			string rewardJson = seqReward.toJSONObject().ToString();
+			rewardStorage_SetLastSeqIdxGiven(rewardJson, idx);
 		}		
 #endif
 	}
