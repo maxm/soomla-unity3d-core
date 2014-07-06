@@ -22,7 +22,7 @@ extern "C"{
         Reward* reward = nil;
         if(sRewardJson) {
             NSString* rewardJson = [NSString stringWithUTF8String:sRewardJson];
-            reward = [[Reward alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:rewardJson]];
+            reward = [Reward fromDictionary:[SoomlaUtils jsonStringToDict:rewardJson]];
         }
         
         [RewardStorage setStatus:give forReward:reward andNotify:notify];
@@ -32,7 +32,7 @@ extern "C"{
         Reward* reward = nil;
         if(sRewardJson) {
             NSString* rewardJson = [NSString stringWithUTF8String:sRewardJson];
-            reward = [[Reward alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:rewardJson]];
+            reward = [Reward fromDictionary:[SoomlaUtils jsonStringToDict:rewardJson]];
         }
         
         return [RewardStorage isRewardGiven:reward];
@@ -43,7 +43,7 @@ extern "C"{
         SequenceReward* seqReward = nil;
         if(sSeqRewardJson) {
             NSString* seqRewardJson = [NSString stringWithUTF8String:sSeqRewardJson];
-            seqReward = [[SequenceReward alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:seqRewardJson]];
+            seqReward = (SequenceReward*)[Reward fromDictionary:[SoomlaUtils jsonStringToDict:seqRewardJson]];
         }
         
         return [RewardStorage getLastSeqIdxGivenForReward:seqReward];
@@ -53,7 +53,7 @@ extern "C"{
         SequenceReward* seqReward = nil;
         if(sSeqRewardJson) {
             NSString* seqRewardJson = [NSString stringWithUTF8String:sSeqRewardJson];
-            seqReward = [[SequenceReward alloc] initWithDictionary:[SoomlaUtils jsonStringToDict:seqRewardJson]];
+            seqReward = (SequenceReward*)[Reward fromDictionary:[SoomlaUtils jsonStringToDict:seqRewardJson]];
         }
         
         return [RewardStorage setLastSeqIdxGiven:idx ForReward:seqReward];
