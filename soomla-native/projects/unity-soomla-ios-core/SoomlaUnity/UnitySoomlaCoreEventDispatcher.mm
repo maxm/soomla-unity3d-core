@@ -4,6 +4,12 @@
 #import "Reward.h"
 #import "SoomlaUtils.h"
 
+extern "C" {
+    void soomlaCore_Init() {
+        [UnitySoomlaCoreEventDispatcher initialize];
+    }
+}
+
 @implementation UnitySoomlaCoreEventDispatcher
 
 + (void)initialize {
