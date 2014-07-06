@@ -36,6 +36,12 @@ namespace Soomla {
 		public string Name;
 		public bool   Repeatable;
 		
+		public bool Owned {
+			get {
+				return RewardStorage.IsRewardGiven(this);
+			}
+		}
+		
 		/// <summary>
 		/// Constructor.
 		/// </summary>
