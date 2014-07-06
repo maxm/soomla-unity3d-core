@@ -16,6 +16,7 @@ using UnityEngine;
 using System;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace Soomla {
 
@@ -23,6 +24,11 @@ namespace Soomla {
 	/// This class provides functions for event handling.
 	/// </summary>
 	public class CoreEvents : MonoBehaviour {
+
+#if UNITY_IOS && !UNITY_EDITOR
+		[DllImport ("__Internal")]
+		private static extern void soomlaCore_Init();
+#endif
 
 		private const string TAG = "SOOMLA CoreEvents";
 
@@ -35,9 +41,23 @@ namespace Soomla {
 			if(instance == null){ 	// making sure we only initialize one instance.
 				instance = this;
 				GameObject.DontDestroyOnLoad(this.gameObject);
+				Initialize();
 			} else {				// Destroying unused instances.
 				GameObject.Destroy(this.gameObject);
 			}
+		}
+
+		public static void Initialize() {
+			SoomlaUtils.LogDebug (TAG, "Initialize");
+#if UNITY_ANDROID && !UNITY_EDITOR
+			AndroidJNI.PushLocalFrame(100);
+			using(AndroidJavaClass jniEventHandler = new AndroidJavaClass("com.soomla.core.unity.EventHandler")) {
+				jniEventHandler.CallStatic("initialize");
+			}
+			AndroidJNI.PopLocalFrame(IntPtr.Zero);
+#elif UNITY_IOS && !UNITY_EDITOR
+			soomlaCore_Init();
+#endif
 		}
 
 		/// <summary>
