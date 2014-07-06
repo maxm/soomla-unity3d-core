@@ -50,7 +50,7 @@ namespace Soomla {
 		public RandomReward(JSONObject jsonReward)
 			: base(jsonReward)
 		{
-			ArrayList rewardsObj = jsonReward[JSONConsts.SOOM_REWARDS].list;
+			List<JSONObject> rewardsObj = jsonReward[JSONConsts.SOOM_REWARDS].list;
 			Rewards = new List<Reward>();
 			foreach(JSONObject rewardObj in rewardsObj) {
 				Rewards.Add(Reward.fromJSONObject(rewardObj));
