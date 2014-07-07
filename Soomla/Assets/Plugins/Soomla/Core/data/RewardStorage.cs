@@ -86,7 +86,7 @@ namespace Soomla
 #if UNITY_EDITOR
 			string key = keyRewardGiven(reward.RewardId);
 			string val = PlayerPrefs.GetString (key);
-			return val != null;
+			return !string.IsNullOrEmpty(val);
 #else
 			return false;
 #endif
@@ -96,7 +96,7 @@ namespace Soomla
 #if UNITY_EDITOR
 			string key = keyRewardIdxSeqGiven(seqReward.RewardId);
 			string val = PlayerPrefs.GetString (key);
-			if (val == null) {
+			if (string.IsNullOrEmpty(val)) {
 				return -1;
 			}
 			return int.Parse(val);
