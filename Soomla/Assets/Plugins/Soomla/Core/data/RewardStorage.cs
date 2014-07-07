@@ -64,21 +64,68 @@ namespace Soomla
 
 		
 		virtual protected void _setRewardStatus(Reward reward, bool give, bool notify) {
-			// TODO: WIE
+#if UNITY_EDITOR
+			string key = keyRewardGiven(reward.RewardId);
+			
+			if (give) {
+				PlayerPrefs.SetString(key, "yes");
+				
+				if (notify) {
+					CoreEvents.OnRewardGiven(reward);
+				}
+			} else {
+				PlayerPrefs.DeleteKey(key);
+				if (notify) {
+					CoreEvents.OnRewardTaken(reward);
+				}
+			}
+#endif
 		}
 
 		virtual protected bool _isRewardGiven(Reward reward) {
-			// TODO: WIE
+#if UNITY_EDITOR
+			string key = keyRewardGiven(reward.RewardId);
+			string val = PlayerPrefs.GetString (key);
+			return val != null;
+#else
 			return false;
+#endif
 		}
 
 		virtual protected int _getLastSeqIdxGiven(SequenceReward seqReward) {
-			// TODO: WIE
+#if UNITY_EDITOR
+			string key = keyRewardIdxSeqGiven(seqReward.RewardId);
+			string val = PlayerPrefs.GetString (key);
+			if (val == null) {
+				return -1;
+			}
+			return int.Parse(val);
+#else
 			return 0;
+#endif
 		}
 
 		virtual protected void _setLastSeqIdxGiven(SequenceReward seqReward, int idx) {
-			// TODO: WIE
+#if UNITY_EDITOR
+			string key = keyRewardIdxSeqGiven(seqReward.RewardId);
+			PlayerPrefs.SetString (key, idx.ToString());
+#endif
+		}
+
+
+
+		/** keys **/
+
+		private static string keyRewards(string rewardId, string postfix) {
+			return CoreSettings.DB_KEY_PREFIX + "rewards." + rewardId + "." + postfix;
+		}
+		
+		private static string keyRewardGiven(string rewardId) {
+			return keyRewards(rewardId, "given");
+		}
+		
+		private static string keyRewardIdxSeqGiven(string rewardId) {
+			return keyRewards(rewardId, "seq.idx");
 		}
 	}
 }

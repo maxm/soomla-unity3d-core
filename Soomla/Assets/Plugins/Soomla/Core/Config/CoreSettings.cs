@@ -33,6 +33,8 @@ namespace Soomla
 	{
 
 #if UNITY_EDITOR
+		public static string DB_KEY_PREFIX = "soomla.";
+
 		static CoreSettings instance = new CoreSettings();
 		static CoreSettings()
 		{
