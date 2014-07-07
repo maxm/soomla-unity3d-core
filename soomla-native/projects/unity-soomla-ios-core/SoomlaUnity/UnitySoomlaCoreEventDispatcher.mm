@@ -23,8 +23,11 @@ extern "C" {
     if (self = [super init]) {
 //        [SoomlaEventHandling observeAllEventsWithObserver:self withSelector:@selector(handleEvent:)];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleEvent:) name:EVENT_REWARD_GIVEN object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleEvent:) name:EVENT_REWARD_TAKEN object:nil];
+        // observe only once for the same selector!
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleEvent:) name:@"rewards" object:nil];
+        // NOTE: this caused the action to be called twice??
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleEvent:) name:EVENT_REWARD_GIVEN object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleEvent:) name:EVENT_REWARD_TAKEN object:nil];
     }
     
     return self;
