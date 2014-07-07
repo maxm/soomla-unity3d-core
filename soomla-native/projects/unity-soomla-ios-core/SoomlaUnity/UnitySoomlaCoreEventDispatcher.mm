@@ -24,7 +24,7 @@ extern "C" {
 //        [SoomlaEventHandling observeAllEventsWithObserver:self withSelector:@selector(handleEvent:)];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleEvent:) name:EVENT_REWARD_GIVEN object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleEvent:) name:EVENT_REWARD_GIVEN object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleEvent:) name:EVENT_REWARD_TAKEN object:nil];
     }
     
     return self;
