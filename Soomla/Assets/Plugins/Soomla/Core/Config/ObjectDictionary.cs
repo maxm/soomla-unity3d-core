@@ -41,6 +41,9 @@ public class ObjectDictionary : UnityDictionary<string> {
 	
 	override protected List<UnityKeyValuePair<string, string>> KeyValuePairs {
 		get {
+			if (values == null) {
+				values = new List<ObjectKvp>();
+			}
 			return values.ConvertAll<UnityKeyValuePair<string,string>>(new System.Converter<ObjectKvp, UnityKeyValuePair<string,string>>(
 				x => {
 				return x as UnityKeyValuePair<string,string>;

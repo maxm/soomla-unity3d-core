@@ -41,6 +41,10 @@ namespace Soomla {
 		public static void LogError(string tag, string message) {
 			Debug.LogError(string.Format("{0} {1}", tag, message));
 		}
+
+		public static void LogWarning(string tag, string message) {
+			Debug.LogWarning(string.Format("{0} {1}", tag, message));
+		}
 	}
 }
 
