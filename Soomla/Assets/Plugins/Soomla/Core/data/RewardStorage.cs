@@ -115,7 +115,7 @@ namespace Soomla
 
 
 		/** keys **/
-
+#if UNITY_EDITOR
 		private static string keyRewards(string rewardId, string postfix) {
 			return CoreSettings.DB_KEY_PREFIX + "rewards." + rewardId + "." + postfix;
 		}
@@ -127,6 +127,7 @@ namespace Soomla
 		private static string keyRewardIdxSeqGiven(string rewardId) {
 			return keyRewards(rewardId, "seq.idx");
 		}
+#endif
 	}
 }
 
