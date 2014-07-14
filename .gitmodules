@@ -1,3 +1,6 @@
 [submodule "submodules/soomla-ios-core"]
 	path = submodules/soomla-ios-core
 	url = https://github.com/soomla/soomla-ios-core
+[submodule "submodules/soomla-android-core"]
+	path = submodules/soomla-android-core
+	url = git@github.com:soomla/soomla-android-core.git

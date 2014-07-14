@@ -1,20 +1,22 @@
 package com.soomla.core.unity;
 
 import com.soomla.BusProvider;
+import com.soomla.SoomlaUtils;
 import com.soomla.events.RewardGivenEvent;
 import com.soomla.events.RewardTakenEvent;
 import com.squareup.otto.Subscribe;
 import com.unity3d.player.UnityPlayer;
 
-public class EventHandler {
-    private static EventHandler mLocalEventHandler;
+public class SoomlaEventHandler {
+    private static SoomlaEventHandler mLocalEventHandler;
 
     public static void initialize() {
-        mLocalEventHandler = new EventHandler();
+        SoomlaUtils.LogDebug("SOOMLA Unity SoomlaEventHandler", "Initializing SoomlaEventHandler ...");
+        mLocalEventHandler = new SoomlaEventHandler();
 
     }
 
-    public EventHandler() {
+    public SoomlaEventHandler() {
         BusProvider.getInstance().register(this);
     }
 

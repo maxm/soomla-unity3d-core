@@ -8,7 +8,9 @@ soomla-native/projects/unity-android-profile/.idea/artifacts
 soomla-native/projects/unity-android-profile/.idea/workspace.xml
 soomla-native/projects/unity-android-profile/local.properties
 soomla-native/projects/unity-android-profile/out
+soomla-native/projects/unity-soomla-android-core/.idea/workspace.xml
 
+soomla-native/projects/unity-soomla-android-core/out
 soomla-native/projects/unity-ios-profile/build
 
 create_unity.log

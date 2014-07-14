@@ -4,6 +4,8 @@
 #import "SequenceReward.h"
 #import "RewardStorage.h"
 #import "SoomlaUtils.h"
+#import "UnitySoomlaCoreEventDispatcher.h"
+#import "SoomlaConfig.h"
 
 char* AutonomousStringCopy (const char* string)
 {
@@ -14,9 +16,14 @@ char* AutonomousStringCopy (const char* string)
     strcpy(res, string);
     return res;
 }
-
-extern "C"{
-	
+extern "C" {
+    void soomlaCore_Init(const char* secret, bool debug) {
+        LogDebug(@"SOOMLA Unity UnitySoomlaCore", @"Initializing SoomlaEventHandler ...");
+        
+        DEBUG_LOG = debug;
+        [UnitySoomlaCoreEventDispatcher initialize];
+        [Soomla initializeWithSecret:[NSString stringWithUTF8String:secret]];
+    }
 
     void rewardStorage_SetRewardStatus(const char* sRewardJson, bool give, bool notify) {
         Reward* reward = nil;

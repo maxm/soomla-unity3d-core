@@ -27,7 +27,7 @@ namespace Soomla {
 
 #if UNITY_IOS && !UNITY_EDITOR
 		[DllImport ("__Internal")]
-		private static extern void soomlaCore_Init();
+		private static extern void soomlaCore_Init(string secret, [MarshalAs(UnmanagedType.Bool)] bool debug);
 #endif
 
 		private const string TAG = "SOOMLA CoreEvents";
@@ -48,15 +48,26 @@ namespace Soomla {
 		}
 
 		public static void Initialize() {
-			SoomlaUtils.LogDebug (TAG, "Initialize");
+			SoomlaUtils.LogDebug (TAG, "Initializing CoreEvents and Soomla Core ...");
 #if UNITY_ANDROID && !UNITY_EDITOR
 			AndroidJNI.PushLocalFrame(100);
-			using(AndroidJavaClass jniEventHandler = new AndroidJavaClass("com.soomla.core.unity.EventHandler")) {
+
+			using(AndroidJavaClass jniStoreConfigClass = new AndroidJavaClass("com.soomla.SoomlaConfig")) {
+				jniStoreConfigClass.SetStatic("logDebug", CoreSettings.DebugMessages);
+			}
+
+			// Initializing SoomlaEventHandler
+			using(AndroidJavaClass jniEventHandler = new AndroidJavaClass("com.soomla.core.unity.SoomlaEventHandler")) {
 				jniEventHandler.CallStatic("initialize");
+			}
+
+			// Initializing Soomla Secret
+			using(AndroidJavaClass jniSoomlaClass = new AndroidJavaClass("com.soomla.Soomla")) {
+				jniSoomlaClass.CallStatic("initialize", CoreSettings.SoomlaSecret);
 			}
 			AndroidJNI.PopLocalFrame(IntPtr.Zero);
 #elif UNITY_IOS && !UNITY_EDITOR
-			soomlaCore_Init();
+			soomlaCore_Init(CoreSettings.SoomlaSecret, CoreSettings.DebugMessages);
 #endif
 		}
 
