@@ -29,21 +29,21 @@ namespace Soomla {
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="rewardId">see parent</param>
+		/// <param name="id">see parent</param>
 		/// <param name="name">see parent</param>
-		public BadgeReward(string rewardId, string name)
-			: base(rewardId, name)
+		public BadgeReward(string id, string name)
+			: base(id, name)
 		{
 		}
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="rewardId">see parent</param>
+		/// <param name="id">see parent</param>
 		/// <param name="name">see parent</param>
 		/// <param name="iconUrl">A url to the icon of this Badge on the device.</param>
-		public BadgeReward(string rewardId, string name, string iconUrl)
-			: base(rewardId, name)
+		public BadgeReward(string id, string name, string iconUrl)
+			: base(id, name)
 		{
 			IconUrl = iconUrl;
 		}

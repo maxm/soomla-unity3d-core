@@ -65,7 +65,7 @@ namespace Soomla
 		
 		virtual protected void _setRewardStatus(Reward reward, bool give, bool notify) {
 #if UNITY_EDITOR
-			string key = keyRewardGiven(reward.RewardId);
+			string key = keyRewardGiven(reward.ID);
 			
 			if (give) {
 				PlayerPrefs.SetString(key, "yes");
@@ -84,7 +84,7 @@ namespace Soomla
 
 		virtual protected bool _isRewardGiven(Reward reward) {
 #if UNITY_EDITOR
-			string key = keyRewardGiven(reward.RewardId);
+			string key = keyRewardGiven(reward.ID);
 			string val = PlayerPrefs.GetString (key);
 			return !string.IsNullOrEmpty(val);
 #else
@@ -94,7 +94,7 @@ namespace Soomla
 
 		virtual protected int _getLastSeqIdxGiven(SequenceReward seqReward) {
 #if UNITY_EDITOR
-			string key = keyRewardIdxSeqGiven(seqReward.RewardId);
+			string key = keyRewardIdxSeqGiven(seqReward.ID);
 			string val = PlayerPrefs.GetString (key);
 			if (string.IsNullOrEmpty(val)) {
 				return -1;
@@ -107,7 +107,7 @@ namespace Soomla
 
 		virtual protected void _setLastSeqIdxGiven(SequenceReward seqReward, int idx) {
 #if UNITY_EDITOR
-			string key = keyRewardIdxSeqGiven(seqReward.RewardId);
+			string key = keyRewardIdxSeqGiven(seqReward.ID);
 			PlayerPrefs.SetString (key, idx.ToString());
 #endif
 		}

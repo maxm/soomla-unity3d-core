@@ -29,11 +29,9 @@ namespace Soomla {
 	/// In the Profile module, rewards can be attached to various actions. For example:
 	/// You can give your user 100 coins for logging in through Facebook.
 	/// </summary>
-	public abstract class Reward {
+	public abstract class Reward : SoomlaEntity {
 		private static string TAG = "SOOMLA Reward";
 
-		public string RewardId;
-		public string Name;
 		public bool   Repeatable;
 		
 		public bool Owned {
@@ -45,12 +43,11 @@ namespace Soomla {
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="rewardId">the reward's ID (unique id to distinguish between rewards).</param>
+		/// <param name="id">the reward's ID (unique id to distinguish between rewards).</param>
 		/// <param name="name">the reward's name.</param>
-		public Reward(string rewardId, string name)
+		public Reward(string id, string name)
+			: base(id, name, "")
 		{
-			RewardId = rewardId;
-			Name = name;
 			Repeatable = false;
 		}
 
@@ -58,10 +55,9 @@ namespace Soomla {
 		/// Constructor.
 		/// </summary>
 		/// <param name="jsonReward">A JSONObject representation of <c>Reward</c>.</param>
-		public Reward(JSONObject jsonReward)
+		public Reward(JSONObject jsonReward) :
+			base(jsonReward)
 		{
-			RewardId = jsonReward[JSONConsts.SOOM_REWARD_REWARDID].str;
-			Name = jsonReward[JSONConsts.SOOM_NAME].str;
 			JSONObject repeatObj = jsonReward[JSONConsts.SOOM_REWARD_REPEAT];
 			if (repeatObj) {
 				Repeatable = repeatObj.b;
@@ -74,10 +70,8 @@ namespace Soomla {
 		/// Constructor.
 		/// </summary>
 		/// <returns>A JSONObject representation of <c>Reward</c>.</return>
-		public virtual JSONObject toJSONObject() {
-			JSONObject obj = new JSONObject(JSONObject.Type.OBJECT);
-			obj.AddField(JSONConsts.SOOM_REWARD_REWARDID, RewardId);
-			obj.AddField(JSONConsts.SOOM_NAME, Name);
+		public override JSONObject toJSONObject() {
+			JSONObject obj = base.toJSONObject();
 			obj.AddField(JSONConsts.SOOM_REWARD_REPEAT, Repeatable);
 			obj.AddField(JSONConsts.SOOM_CLASSNAME, GetType().Name);
 			
@@ -109,7 +103,7 @@ namespace Soomla {
 		public bool Take() {
 
 			if (!RewardStorage.IsRewardGiven(this)) {
-				SoomlaUtils.LogDebug(TAG, "Reward not given. id: " + RewardId);
+				SoomlaUtils.LogDebug(TAG, "Reward not given. id: " + ID);
 				return false;
 			}
 			
@@ -123,7 +117,7 @@ namespace Soomla {
 
 		public bool Give() {
 			if (RewardStorage.IsRewardGiven(this) && !Repeatable) {
-				SoomlaUtils.LogDebug(TAG, "Reward was already given and is not repeatable. id: " + RewardId);
+				SoomlaUtils.LogDebug(TAG, "Reward was already given and is not repeatable. id: " + ID);
 				return false;
 			}
 			

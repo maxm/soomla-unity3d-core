@@ -34,11 +34,11 @@ namespace Soomla {
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="rewardId">see parent.</param>
+		/// <param name="id">see parent.</param>
 		/// <param name="name">see parent.</param>
 		/// <param name="rewards">A list of rewards from which to choose the reward randomly.</param>
-		public RandomReward(string rewardId, string name, List<Reward> rewards)
-			: base(rewardId, name)
+		public RandomReward(string id, string name, List<Reward> rewards)
+			: base(id, name)
 		{
 			Rewards = rewards;
 		}

@@ -31,11 +31,11 @@ namespace Soomla {
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="rewardId">see parent.</param>
+		/// <param name="id">see parent.</param>
 		/// <param name="name">see parent.</param>
 		/// <param name="rewards">The list of rewards in the sequence.</param>
-		public SequenceReward(string rewardId, string name, List<Reward> rewards)
-			: base(rewardId, name)
+		public SequenceReward(string id, string name, List<Reward> rewards)
+			: base(id, name)
 		{
 			Rewards = rewards;
 			Repeatable = true;
@@ -87,7 +87,7 @@ namespace Soomla {
 
 		public bool ForceNextRewardToGive(Reward reward) {
 			for (int i = 0; i < Rewards.Count; i++) {
-				if (Rewards[i].RewardId == reward.RewardId) {
+				if (Rewards[i].ID == reward.ID) {
 					RewardStorage.SetLastSeqIdxGiven(this, i - 1);
 					return true;
 				}

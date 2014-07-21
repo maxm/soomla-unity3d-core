@@ -31,14 +31,18 @@ namespace Soomla {
 		public string Name;
 		public string Description;
 		public string ID;
-		
+
+		protected SoomlaEntity (string id) 
+			: this(id, "", "")
+		{
+		}
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="name">Name.</param>
 		/// <param name="description">Description.</param>
 		/// <param name="id">unique id.</param>
-		protected SoomlaEntity (string name, string description, string id)
+		protected SoomlaEntity (string id, string name, string description)
 		{
 			this.Name = name;
 			this.Description = description;
@@ -90,6 +94,68 @@ namespace Soomla {
 			return AndroidJNI.IsInstanceOf(jniEntity.GetRawObject(), cls);
 		}
 #endif
+
+
+		// Equality
+		
+		public override bool Equals(System.Object obj)
+		{
+			// If parameter is null return false.
+			if (obj == null)
+			{
+				return false;
+			}
+			
+			// If parameter cannot be cast to Point return false.
+			SoomlaEntity g = obj as SoomlaEntity;
+			if ((System.Object)g == null)
+			{
+				return false;
+			}
+			
+			// Return true if the fields match:
+			return (ID == g.ID);
+		}
+		
+		public bool Equals(SoomlaEntity g)
+		{
+			// If parameter is null return false:
+			if ((object)g == null)
+			{
+				return false;
+			}
+			
+			// Return true if the fields match:
+			return (ID == g.ID);
+		}
+		
+		public override int GetHashCode()
+		{
+			return ID.GetHashCode();
+		}
+		
+		public static bool operator ==(SoomlaEntity a, SoomlaEntity b)
+		{
+			// If both are null, or both are same instance, return true.
+			if (System.Object.ReferenceEquals(a, b))
+			{
+				return true;
+			}
+			
+			// If one is null, but not both, return false.
+			if (((object)a == null) || ((object)b == null))
+			{
+				return false;
+			}
+			
+			// Return true if the fields match:
+			return a.ID == b.ID;
+		}
+		
+		public static bool operator !=(SoomlaEntity a, SoomlaEntity b)
+		{
+			return !(a == b);
+		}
 
 	}
 }
