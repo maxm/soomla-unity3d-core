@@ -32,7 +32,9 @@ namespace Soomla {
 		public const string SOOM_REWARD_REPEAT     = "repeatable";
 
 		/** Global **/
-		
+		public const string SOOM_ENTITY_NAME       = "name";
+		public const string SOOM_ENTITY_DESCRIPTION = "description";
+		public const string SOOM_ENTITY_ID         = "itemId";
 		public const string SOOM_ASSOCITEMID       = "associatedItemId";
 		public const string SOOM_ASSOCSCOREID      = "associatedScoreId";
 		public const string SOOM_DESIRED_RECORD    = "desiredRecord";
