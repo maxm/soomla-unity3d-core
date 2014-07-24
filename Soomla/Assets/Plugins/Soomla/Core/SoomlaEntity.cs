@@ -63,9 +63,9 @@ namespace Soomla {
 		/// <param name="jsonEntity">A JSONObject representation of the wanted <c>SoomlaEntity</c>.</param>
 		protected SoomlaEntity(JSONObject jsonEntity) {
 			if (jsonEntity[JSONConsts.SOOM_ENTITY_NAME]) {
-				this.Description = jsonEntity[JSONConsts.SOOM_ENTITY_NAME].str;
+				this.Name = jsonEntity[JSONConsts.SOOM_ENTITY_NAME].str;
 			} else {
-				this.Description = "";
+				this.Name = "";
 			}
 			if (jsonEntity[JSONConsts.SOOM_ENTITY_DESCRIPTION]) {
 				this.Description = jsonEntity[JSONConsts.SOOM_ENTITY_DESCRIPTION].str;
